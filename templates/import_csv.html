@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}Import Statement{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/import.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="import-container">
+
+    <div class="import-header">
+
+        <div>
+
+            <h1>Import Statement</h1>
+
+            <p>
+                Upload your bank or UPI statement CSV to automatically import expenses.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Main Import Card -->
+    <div class="import-card">
+
+        <div class="import-icon">
+            <i class="bi bi-file-earmark-arrow-up"></i>
+        </div>
+
+        <h2>Upload CSV File</h2>
+
+        <p class="import-description">
+            Upload a CSV exported from Google Pay, Paytm, YONO, or your bank app.
+            Transactions will be added automatically with categories guessed
+            from the merchant name.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data" class="import-form">
+
+            <div class="file-upload-wrapper">
+
+                <label for="csv_file" class="file-upload-label">
+
+                    <i class="bi bi-cloud-upload"></i>
+
+                    <span>Choose CSV File</span>
+
+                    <input
+                        type="file"
+                        name="csv_file"
+                        id="csv_file"
+                        accept=".csv"
+                        required
+                        class="file-input-hidden">
+
+                </label>
+
+                <div class="file-name-display" id="file-name-display">
+                    No file selected
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn-import">
+
+                <i class="bi bi-upload"></i>
+
+                Import Now
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- Format Guide Card -->
+    <div class="format-card">
+
+        <div class="format-header">
+
+            <i class="bi bi-info-circle"></i>
+
+            <h3>Expected CSV Format</h3>
+
+        </div>
+
+        <p class="format-description">
+            Your CSV needs these column headers (in any order):
+        </p>
+
+        <pre class="code-block">date,description,amount
+2026-07-01,Zomato Order,450
+2026-07-02,Uber Ride,180
+2026-07-03,Netflix Subscription,199</pre>
+
+        <p class="format-note">
+            <i class="bi bi-check-circle"></i>
+            Dates can be in YYYY-MM-DD, DD-MM-YYYY, DD/MM/YYYY, or MM/DD/YYYY format.
+        </p>
+
+    </div>
+
+    <!-- Demo Card -->
+    <div class="demo-card">
+
+        <div class="demo-content">
+
+            <div class="demo-icon">
+
+                <i class="bi bi-phone"></i>
+
+            </div>
+
+            <div class="demo-text">
+
+                <h3>Try the Live Demo</h3>
+
+                <p>
+                    Simulates a real UPI payment app — enter an amount, hit Pay,
+                    and watch it flow into your expense tracker automatically.
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('mock_payment') }}" class="btn-demo">
+
+                <i class="bi bi-arrow-right-circle"></i>
+
+                Open Mock Payment App
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== SLIM FULL WIDTH FOOTER ===== -->
+<footer class="import-footer">
+    <div class="footer-inner">
+        <span class="footer-brand">Advanced Expense Tracker</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Manage your income, expenses and savings with ease.</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Developed with ❤️ by <strong>Donbok Syiemlieh</strong></span>
+        <span class="footer-divider">|</span>
+        <span class="footer-copy">© 2026</span>
+    </div>
+</footer>
+
+<script>
+    // Show selected file name
+    document.getElementById('csv_file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+        document.getElementById('file-name-display').textContent = fileName;
+    });
+</script>
+
+{% endblock %}

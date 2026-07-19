@@ -1,0 +1,534 @@
+/* ===========================
+   REGISTER PAGE STYLES
+   (register.html)
+===========================*/
+
+/* ----- Reset ----- */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ----- Page Background ----- */
+body {
+    background: linear-gradient(135deg, #e8f0fe 0%, #d4e0f5 30%, #f0f5ff 70%, #e8f0fe 100%);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Decorative background elements */
+body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(13, 110, 253, 0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    left: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(25, 135, 84, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ----- Container ----- */
+.register-container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 25px 25px 30px;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+}
+
+/* ----- Register Card ----- */
+.register-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 40px 35px;
+    box-shadow: 0 8px 40px rgba(0, 20, 40, 0.08), 0 2px 10px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    width: 100%;
+}
+
+/* ----- Register Header ----- */
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.register-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #eef3fc, #dce8f8);
+    color: #0d6efd;
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+}
+
+.register-header h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1a2a4a;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+}
+
+.register-subtitle {
+    color: #5a7a9a;
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ----- Form ----- */
+.register-form {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+}
+
+.form-group label i {
+    color: #0d6efd;
+    font-size: 0.9rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 13px 16px;
+    border: 2px solid #e2e9f2;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    background: #f8faff;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: #1a2a4a;
+}
+
+.form-input:focus {
+    border-color: #0d6efd;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+    background: #ffffff;
+}
+
+.form-input::placeholder {
+    color: #a0b8d0;
+}
+
+/* Password Wrapper */
+.password-wrapper {
+    position: relative;
+}
+
+.password-input {
+    padding-right: 48px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #a0b8d0;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: #0d6efd;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+/* Password Hint */
+.password-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: #a0b8d0;
+}
+
+.password-hint i {
+    font-size: 0.85rem;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+    margin-top: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #5a7a9a;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    accent-color: #0d6efd;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checkbox-label input[type="checkbox"]:focus {
+    outline: 2px solid rgba(13, 110, 253, 0.3);
+    outline-offset: 2px;
+}
+
+.checkbox-label span {
+    line-height: 1.4;
+}
+
+.terms-link {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* ----- Register Button ----- */
+.btn-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 24px rgba(13, 110, 253, 0.3);
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn-register:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(13, 110, 253, 0.4);
+    background: linear-gradient(135deg, #0b5ed7, #084298);
+}
+
+.btn-register i {
+    font-size: 1.1rem;
+}
+
+/* ----- Register Footer (inside card) ----- */
+.register-footer {
+    text-align: center;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #eef3fc;
+}
+
+.register-footer p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: #5a7a9a;
+}
+
+.login-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #0d6efd;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.login-link:hover {
+    color: #0a58ca;
+    text-decoration: underline;
+}
+
+.login-link i {
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   SLIM FULL WIDTH FOOTER
+======================================== */
+.register-footer-bottom {
+    width: 100%;
+    background: linear-gradient(135deg, #0b2b5c 0%, #1a4b8c 100%);
+    padding: 12px 20px;
+    border-top: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    margin-top: auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+}
+
+.register-footer-bottom .footer-inner {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.register-footer-bottom .footer-brand {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+}
+
+.register-footer-bottom .footer-divider {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 300;
+}
+
+.register-footer-bottom .footer-text {
+    font-weight: 300;
+    opacity: 0.85;
+    white-space: nowrap;
+}
+
+.register-footer-bottom .footer-text strong {
+    font-weight: 700;
+    color: #ffdd99;
+}
+
+.register-footer-bottom .footer-copy {
+    font-weight: 300;
+    opacity: 0.6;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+    .register-container {
+        padding: 12px 15px 20px;
+        min-height: calc(100vh - 150px);
+    }
+
+    .register-card {
+        padding: 30px 22px;
+        border-radius: 20px;
+    }
+
+    .register-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .register-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+        margin-bottom: 12px;
+    }
+
+    .register-subtitle {
+        font-size: 0.88rem;
+    }
+
+    .form-input {
+        font-size: 0.9rem;
+        padding: 12px 14px;
+    }
+
+    .btn-register {
+        font-size: 0.95rem;
+        padding: 12px 24px;
+    }
+
+    .register-footer-bottom {
+        padding: 10px 15px;
+        min-height: 48px;
+    }
+
+    .register-footer-bottom .footer-inner {
+        font-size: 0.75rem;
+        gap: 4px 8px;
+    }
+
+    .register-footer-bottom .footer-brand {
+        font-size: 0.85rem;
+    }
+
+    .register-footer-bottom .footer-divider {
+        display: none;
+    }
+
+    .register-footer-bottom .footer-text {
+        white-space: normal;
+        text-align: center;
+    }
+
+    .register-footer-bottom .footer-copy {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-container {
+        padding: 10px 10px 15px;
+        min-height: calc(100vh - 130px);
+    }
+
+    .register-card {
+        padding: 22px 16px;
+        border-radius: 16px;
+    }
+
+    .register-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .register-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .register-subtitle {
+        font-size: 0.82rem;
+    }
+
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-group label {
+        font-size: 0.82rem;
+    }
+
+    .form-input {
+        font-size: 0.85rem;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    .toggle-password {
+        font-size: 0.95rem;
+        right: 10px;
+    }
+
+    .password-hint {
+        font-size: 0.7rem;
+    }
+
+    .checkbox-label {
+        font-size: 0.78rem;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .btn-register {
+        font-size: 0.88rem;
+        padding: 11px 18px;
+    }
+
+    .register-footer p {
+        font-size: 0.85rem;
+    }
+
+    .register-footer-bottom {
+        padding: 8px 10px;
+        min-height: 42px;
+    }
+
+    .register-footer-bottom .footer-inner {
+        font-size: 0.65rem;
+        gap: 2px 6px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .register-footer-bottom .footer-brand {
+        font-size: 0.8rem;
+    }
+
+    .register-footer-bottom .footer-text {
+        font-size: 0.65rem;
+    }
+
+    .register-footer-bottom .footer-copy {
+        font-size: 0.6rem;
+    }
+}

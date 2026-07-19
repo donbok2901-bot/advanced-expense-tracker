@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <div class="login-logo">
+            💰
+        </div>
+
+        <h2>Welcome Back</h2>
+
+        <p class="subtitle">
+            Login to continue managing your expenses.
+        </p>
+
+        <form method="POST">
+
+            <div class="input-group">
+
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+            <div class="input-group">
+
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    required>
+
+            </div>
+
+            <button type="submit" class="login-btn">
+                Login
+            </button>
+
+        </form>
+
+        <div class="links">
+
+            <a href="{{ url_for('forget_password') }}">
+                Forgot Password?
+            </a>
+
+            <p>
+
+                Don't have an account?
+
+                <a href="{{ url_for('register_page') }}">
+                    Register
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="login-footer">
+
+    <h3>Advanced Expense Tracker</h3>
+
+    <!-- decorative divider – purely visual, no functionality -->
+    <div class="footer-divider"></div>
+
+    <p>
+        Manage your income, expenses and savings with ease.
+    </p>
+
+    <p>
+        Developed by <strong>Donbok Syiemlieh</strong>
+    </p>
+
+    <p>
+        © 2026 All Rights Reserved
+    </p>
+
+</footer>
+
+{% endblock %}

@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+{% block title %}Make a Payment{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/payment.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="payment-container">
+
+    <!-- App Selection Screen -->
+    <div id="app-select-screen" class="payment-screen active">
+
+        <div class="payment-header">
+            <div class="payment-header-icon">
+                <i class="bi bi-credit-card"></i>
+            </div>
+            <h2>Choose Payment App</h2>
+            <p class="payment-subtitle">Select your preferred UPI app to continue</p>
+        </div>
+
+        <div class="app-list-header">
+            <a href="{{ url_for('check_balance') }}" class="check-balance-link">
+                <i class="bi bi-wallet2"></i> Check Bank Balance
+            </a>
+        </div>
+
+        <div class="app-list">
+            <button class="app-choice" data-app="Google Pay" style="--app-color:#4285F4; --app-bg:#e8f0fe;">
+                <div class="app-logo" style="background: #4285F4;">
+                    <span>G</span>
+                </div>
+                <div class="app-info">
+                    <span class="app-name">Google Pay</span>
+                    <span class="app-sub">UPI • GPay</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
+            <button class="app-choice" data-app="Paytm" style="--app-color:#00baf2; --app-bg:#e6f7fe;">
+                <div class="app-logo" style="background: #00baf2;">
+                    <span>P</span>
+                </div>
+                <div class="app-info">
+                    <span class="app-name">Paytm</span>
+                    <span class="app-sub">UPI • Paytm</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
+            <button class="app-choice" data-app="YONO SBI" style="--app-color:#5b2d8e; --app-bg:#f0e8f8;">
+                <div class="app-logo" style="background: #5b2d8e;">
+                    <span>Y</span>
+                </div>
+                <div class="app-info">
+                    <span class="app-name">YONO SBI</span>
+                    <span class="app-sub">UPI • SBI</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
+            <button class="app-choice" data-app="PhonePe" style="--app-color:#5f259f; --app-bg:#f0e8f8;">
+                <div class="app-logo" style="background: #5f259f;">
+                    <span>P</span>
+                </div>
+                <div class="app-info">
+                    <span class="app-name">PhonePe</span>
+                    <span class="app-sub">UPI • PhonePe</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+
+            <button class="app-choice" data-app="Amazon Pay" style="--app-color:#00a8e8; --app-bg:#e6f7fe;">
+                <div class="app-logo" style="background: #00a8e8;">
+                    <span>A</span>
+                </div>
+                <div class="app-info">
+                    <span class="app-name">Amazon Pay</span>
+                    <span class="app-sub">UPI • Amazon</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Payment Form Screen -->
+    <div id="pay-screen" class="payment-screen hidden">
+
+        <div class="payment-header" id="pay-header" style="background: #4285F4;">
+            <button id="back-btn" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <div class="app-brand">
+                <div class="app-brand-icon" id="app-brand-icon" style="background: rgba(255,255,255,0.2);">
+                    <span id="app-brand-letter">G</span>
+                </div>
+                <span id="chosen-app-name" class="app-brand-name">Google Pay</span>
+            </div>
+            <div style="width:40px;"></div>
+        </div>
+
+        <div class="payment-body">
+
+            <!-- Merchant / Payee Section -->
+            <div class="payee-section">
+                <div class="payee-avatar">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <div class="payee-info">
+                    <span class="payee-label">Pay to</span>
+                    <input type="text" id="merchant" class="payee-input" placeholder="Enter merchant name" required>
+                </div>
+            </div>
+
+            <!-- Amount Section -->
+            <div class="amount-section">
+                <span class="currency-symbol">₹</span>
+                <input type="number" id="amount" class="amount-input" placeholder="0.00" step="0.01" required>
+            </div>
+
+            <!-- Quick Amount Buttons -->
+            <div class="quick-amounts">
+                <button type="button" class="quick-amount" data-value="100">₹100</button>
+                <button type="button" class="quick-amount" data-value="500">₹500</button>
+                <button type="button" class="quick-amount" data-value="1000">₹1,000</button>
+                <button type="button" class="quick-amount" data-value="2000">₹2,000</button>
+                <button type="button" class="quick-amount" data-value="5000">₹5,000</button>
+            </div>
+
+            <!-- Pay Button -->
+            <button id="pay-btn" class="pay-button">
+                <i class="bi bi-shield-check"></i>
+                Pay Now
+            </button>
+
+            <p class="payment-note">
+                <i class="bi bi-lock"></i>
+                Secured by UPI • Your transaction is protected
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- UPI PIN Entry Screen -->
+    <div id="pin-screen" class="payment-screen hidden">
+
+        <div class="payment-header" id="pin-header" style="background: #4285F4;">
+            <button id="pin-back-btn" class="back-button">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <div class="app-brand">
+                <span class="app-brand-name">Enter UPI PIN</span>
+            </div>
+            <div style="width:40px;"></div>
+        </div>
+
+        <div class="payment-body">
+
+            <div class="pin-summary">
+                <span class="pin-summary-label">Paying</span>
+                <span class="pin-summary-amount" id="pin-summary-amount">₹0.00</span>
+                <span class="pin-summary-to" id="pin-summary-to">to -</span>
+            </div>
+
+            <input type="password" id="pin-input" class="pin-input" maxlength="6"
+                   inputmode="numeric" pattern="[0-9]*" placeholder="Enter your UPI PIN" autocomplete="off">
+
+            <p id="pin-error" class="pin-error hidden"></p>
+
+            <button id="confirm-pin-btn" class="pay-button">
+                <i class="bi bi-shield-lock"></i>
+                Confirm &amp; Pay
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- Processing Screen -->
+    <div id="processing-screen" class="payment-screen hidden">
+
+        <div class="processing-content">
+
+            <div class="processing-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-icon">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+            </div>
+
+            <h3>Processing Payment</h3>
+
+            <p class="processing-sub">Please wait while we complete your transaction</p>
+
+            <div class="processing-details">
+                <div class="processing-row">
+                    <span class="processing-label">Merchant</span>
+                    <span class="processing-value" id="processing-merchant">-</span>
+                </div>
+                <div class="processing-row">
+                    <span class="processing-label">Amount</span>
+                    <span class="processing-value" id="processing-amount">-</span>
+                </div>
+                <div class="processing-row">
+                    <span class="processing-label">App</span>
+                    <span class="processing-value" id="processing-app">-</span>
+                </div>
+            </div>
+
+            <div class="processing-bar">
+                <div class="processing-bar-fill"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen" class="payment-screen hidden">
+
+        <div class="success-content">
+
+            <div class="success-icon">
+                <i class="bi bi-check-lg"></i>
+            </div>
+
+            <h3>Payment Successful!</h3>
+
+            <div class="success-details-card">
+                <div class="success-row">
+                    <span class="success-label">Amount</span>
+                    <span class="success-value" id="success-amount">₹0.00</span>
+                </div>
+                <div class="success-row">
+                    <span class="success-label">Merchant</span>
+                    <span class="success-value" id="success-merchant">-</span>
+                </div>
+                <div class="success-row">
+                    <span class="success-label">Payment Method</span>
+                    <span class="success-value" id="success-app">-</span>
+                </div>
+                <div class="success-row">
+                    <span class="success-label">Transaction ID</span>
+                    <span class="success-value" id="success-txn-id">-</span>
+                </div>
+            </div>
+
+            <div class="webhook-note">
+                <i class="bi bi-check-circle-fill"></i>
+                Webhook received by Expense Tracker — auto-categorized and logged.
+            </div>
+
+            <div class="success-actions">
+                <a href="{{ url_for('home') }}" class="btn-success-primary">
+                    <i class="bi bi-speedometer2"></i>
+                    View Dashboard
+                </a>
+                <button id="pay-again-btn" class="btn-success-secondary">
+                    <i class="bi bi-plus-circle"></i>
+                    Make Another Payment
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== SLIM FULL WIDTH FOOTER ===== -->
+<footer class="payment-footer">
+    <div class="footer-inner">
+        <span class="footer-brand">Advanced Expense Tracker</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Manage your income, expenses and savings with ease.</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Developed with ❤️ by <strong>Donbok Syiemlieh</strong></span>
+        <span class="footer-divider">|</span>
+        <span class="footer-copy">© 2026</span>
+    </div>
+</footer>
+
+<script>
+    // ===== ALL ORIGINAL JAVASCRIPT — PRESERVED, WITH PIN STEP ADDED =====
+    const appSelectScreen = document.getElementById('app-select-screen');
+    const payScreen = document.getElementById('pay-screen');
+    const pinScreen = document.getElementById('pin-screen');
+    const processingScreen = document.getElementById('processing-screen');
+    const successScreen = document.getElementById('success-screen');
+    const payHeader = document.getElementById('pay-header');
+    const pinHeader = document.getElementById('pin-header');
+    const chosenAppName = document.getElementById('chosen-app-name');
+    const appBrandLetter = document.getElementById('app-brand-letter');
+    const appBrandIcon = document.getElementById('app-brand-icon');
+
+    let selectedApp = "";
+    let pendingMerchant = "";
+    let pendingAmount = "";
+
+    document.querySelectorAll('.app-choice').forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectedApp = btn.dataset.app;
+            const appColor = getComputedStyle(btn).getPropertyValue('--app-color');
+            const appLetter = btn.querySelector('.app-logo span').textContent;
+
+            chosenAppName.textContent = selectedApp;
+            appBrandLetter.textContent = appLetter;
+            appBrandIcon.style.background = appColor;
+            payHeader.style.background = appColor;
+
+            appSelectScreen.classList.remove('active');
+            appSelectScreen.classList.add('hidden');
+            payScreen.classList.remove('hidden');
+            payScreen.classList.add('active');
+        });
+    });
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+        payScreen.classList.remove('active');
+        payScreen.classList.add('hidden');
+        appSelectScreen.classList.remove('hidden');
+        appSelectScreen.classList.add('active');
+    });
+
+    document.getElementById('pin-back-btn').addEventListener('click', () => {
+        pinScreen.classList.remove('active');
+        pinScreen.classList.add('hidden');
+        payScreen.classList.remove('hidden');
+        payScreen.classList.add('active');
+        document.getElementById('pin-input').value = "";
+        document.getElementById('pin-error').classList.add('hidden');
+    });
+
+    // Quick Amount Buttons
+    document.querySelectorAll('.quick-amount').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const value = btn.dataset.value;
+            document.getElementById('amount').value = value;
+        });
+    });
+
+    // Step 1: "Pay Now" -> validate merchant/amount, show PIN screen
+    document.getElementById('pay-btn').addEventListener('click', () => {
+        const merchant = document.getElementById('merchant').value.trim();
+        const amount = document.getElementById('amount').value.trim();
+
+        if (!merchant || !amount || Number(amount) <= 0) {
+            alert("Please enter a merchant name and a valid amount.");
+            return;
+        }
+
+        pendingMerchant = merchant;
+        pendingAmount = amount;
+
+        document.getElementById('pin-summary-amount').textContent = '₹' + parseFloat(amount).toFixed(2);
+        document.getElementById('pin-summary-to').textContent = 'to ' + merchant;
+        pinHeader.style.background = payHeader.style.background;
+        document.getElementById('pin-input').value = "";
+        document.getElementById('pin-error').classList.add('hidden');
+
+        payScreen.classList.remove('active');
+        payScreen.classList.add('hidden');
+        pinScreen.classList.remove('hidden');
+        pinScreen.classList.add('active');
+
+        // Give the field focus for convenience
+        setTimeout(() => document.getElementById('pin-input').focus(), 100);
+    });
+
+    // Step 2: Confirm PIN -> submit payment, handle no_pin / invalid_pin /
+    // insufficient_balance responses from the server
+    document.getElementById('confirm-pin-btn').addEventListener('click', async () => {
+        const pin = document.getElementById('pin-input').value.trim();
+        const errorEl = document.getElementById('pin-error');
+
+        if (!/^\d{4,6}$/.test(pin)) {
+            errorEl.textContent = "Enter your 4-6 digit UPI PIN.";
+            errorEl.classList.remove('hidden');
+            return;
+        }
+        errorEl.classList.add('hidden');
+
+        // Update processing details
+        document.getElementById('processing-merchant').textContent = pendingMerchant;
+        document.getElementById('processing-amount').textContent = '₹' + parseFloat(pendingAmount).toFixed(2);
+        document.getElementById('processing-app').textContent = selectedApp;
+
+        pinScreen.classList.remove('active');
+        pinScreen.classList.add('hidden');
+        processingScreen.classList.remove('hidden');
+        processingScreen.classList.add('active');
+
+        // Animate progress bar
+        const progressBar = document.querySelector('.processing-bar-fill');
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            setTimeout(() => { progressBar.style.width = '100%'; }, 100);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 2200));
+
+        try {
+            const res = await fetch('/simulate-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    merchant: pendingMerchant,
+                    amount: pendingAmount,
+                    app_name: selectedApp,
+                    pin: pin
+                })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                // Something went wrong -- send the user back to fix it
+                processingScreen.classList.remove('active');
+                processingScreen.classList.add('hidden');
+
+                if (data.error === "no_pin") {
+                    window.location.href = "{{ url_for('setup_upi_pin') }}";
+                    return;
+                }
+
+                if (data.error === "invalid_pin") {
+                    pinScreen.classList.remove('hidden');
+                    pinScreen.classList.add('active');
+                    errorEl.textContent = "Incorrect PIN. Please try again.";
+                    errorEl.classList.remove('hidden');
+                    document.getElementById('pin-input').value = "";
+                    return;
+                }
+
+                if (data.error === "insufficient_balance") {
+                    payScreen.classList.remove('hidden');
+                    payScreen.classList.add('active');
+                    alert(data.message || "Insufficient balance for this payment.");
+                    return;
+                }
+
+                alert(data.message || "Payment failed. Please try again.");
+                appSelectScreen.classList.remove('hidden');
+                appSelectScreen.classList.add('active');
+                return;
+            }
+
+            document.getElementById('success-amount').textContent = '₹' + parseFloat(data.amount).toFixed(2);
+            document.getElementById('success-merchant').textContent = data.merchant;
+            document.getElementById('success-app').textContent = data.app;
+            document.getElementById('success-txn-id').textContent = data.transaction_id;
+
+            processingScreen.classList.remove('active');
+            processingScreen.classList.add('hidden');
+            successScreen.classList.remove('hidden');
+            successScreen.classList.add('active');
+        } catch (err) {
+            processingScreen.classList.remove('active');
+            processingScreen.classList.add('hidden');
+            alert("Payment simulation failed. Please try again.");
+            appSelectScreen.classList.remove('hidden');
+            appSelectScreen.classList.add('active');
+        }
+    });
+
+    document.getElementById('pay-again-btn').addEventListener('click', () => {
+        document.getElementById('merchant').value = "";
+        document.getElementById('amount').value = "";
+        successScreen.classList.remove('active');
+        successScreen.classList.add('hidden');
+        appSelectScreen.classList.remove('hidden');
+        appSelectScreen.classList.add('active');
+    });
+</script>
+
+{% endblock %}

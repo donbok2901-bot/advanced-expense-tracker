@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Edit Expense{% endblock %}
+{% block content %}
+    <div class="form-box">
+        <h2>Edit Expense</h2>
+        <form method="POST">
+            <label for="amount">Amount (₹)</label>
+            <input type="number" step="0.01" name="amount" id="amount" value="{{ expense[1] }}" required>
+
+            <label for="description">Description</label>
+            <input type="text" name="description" id="description" value="{{ expense[2] or '' }}">
+
+            <label for="expense_date">Date</label>
+            <input type="date" name="expense_date" id="expense_date" value="{{ expense[3] }}" required>
+
+            <label for="category_id">Category</label>
+            <select name="category_id" id="category_id">
+                <option value="">-- Select category --</option>
+                {% for cat in categories %}
+                    <option value="{{ cat[0] }}" {% if cat[0] == expense[4] %}selected{% endif %}>
+                        {{ cat[1] }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-primary">Update Expense</button>
+        </form>
+        <p><a href="{{ url_for('view_expenses') }}">Back to expenses</a></p>
+    </div>
+{% endblock %}

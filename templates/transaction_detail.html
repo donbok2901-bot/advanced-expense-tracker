@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Transaction Details{% endblock %}
+{% block content %}
+
+<div class="txn-detail-container">
+
+    <a href="{{ url_for('view_expenses') }}" class="txn-back-link">
+        <i class="bi bi-arrow-left"></i> Back to Expenses
+    </a>
+
+    <div class="txn-detail-card">
+
+        <div class="txn-detail-header">
+            <div class="txn-detail-icon">
+                <i class="bi bi-{% if txn[5] == 'webhook' %}phone{% elif txn[5] == 'csv' %}file-earmark-spreadsheet{% else %}pencil{% endif %}"></i>
+            </div>
+            <div>
+                <h2>{{ txn[2] or "Untitled Transaction" }}</h2>
+                <span class="txn-category-badge">{{ txn[4] or 'Uncategorized' }}</span>
+            </div>
+        </div>
+
+        <div class="txn-amount-row">
+            <span class="txn-amount-label">Amount</span>
+            <span class="txn-amount-value">₹{{ "%.2f"|format(txn[1]) }}</span>
+        </div>
+
+        <div class="txn-detail-grid">
+            <div class="txn-detail-item">
+                <span class="txn-detail-label">Date</span>
+                <span class="txn-detail-value">{{ txn[3] }}</span>
+            </div>
+
+            <div class="txn-detail-item">
+                <span class="txn-detail-label">Source</span>
+                <span class="txn-detail-value">
+                    {% if txn[5] == 'webhook' %}📲 UPI Payment
+                    {% elif txn[5] == 'csv' %}📥 CSV Import
+                    {% else %}✍️ Manual Entry
+                    {% endif %}
+                </span>
+            </div>
+
+            {% if txn[5] == 'webhook' %}
+                <div class="txn-detail-item">
+                    <span class="txn-detail-label">Payment App</span>
+                    <span class="txn-detail-value">{{ txn[6] or "-" }}</span>
+                </div>
+
+                <div class="txn-detail-item">
+                    <span class="txn-detail-label">Paid To</span>
+                    <span class="txn-detail-value">{{ txn[7] or "-" }}</span>
+                </div>
+
+                <div class="txn-detail-item">
+                    <span class="txn-detail-label">Transaction ID</span>
+                    <span class="txn-detail-value txn-mono">{{ txn[8] or "-" }}</span>
+                </div>
+            {% endif %}
+
+            <div class="txn-detail-item">
+                <span class="txn-detail-label">Logged At</span>
+                <span class="txn-detail-value">{{ txn[9] }}</span>
+            </div>
+        </div>
+
+        <div class="txn-detail-actions">
+            {% if txn[5] != 'webhook' %}
+                <a href="{{ url_for('edit_expense', id=txn[0]) }}" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+            {% endif %}
+            <a href="{{ url_for('delete_expense', id=txn[0]) }}"
+               class="btn btn-secondary"
+               onclick="return confirm('Delete this transaction?')">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

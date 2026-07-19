@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/front.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="front-container">
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+
+        <div class="hero-badge">
+            <i class="bi bi-rocket-takeoff"></i>
+            Smart Expense Management
+        </div>
+
+        <h1 class="hero-title">
+            Track every expense,<br>
+            <span class="hero-highlight">automatically.</span>
+        </h1>
+
+        <p class="hero-description">
+            Import your bank or UPI statements and let the tracker
+            automatically categorize every transaction for you.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('login_page') }}" class="btn-hero-primary">
+
+                <i class="bi bi-box-arrow-in-right"></i>
+
+                Login
+
+            </a>
+
+            <a href="{{ url_for('register_page') }}" class="btn-hero-secondary">
+
+                <i class="bi bi-person-plus"></i>
+
+                Create Account
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-icon" style="background: linear-gradient(135deg, #eef3fc, #dce8f8); color: #0d6efd;">
+                    <i class="bi bi-upload"></i>
+                </div>
+
+                <h3>Import Statements</h3>
+
+                <p>
+                    Upload CSV files from Google Pay, Paytm, YONO,
+                    or any bank app with one click.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); color: #28a745;">
+                    <i class="bi bi-tags"></i>
+                </div>
+
+                <h3>Auto Categorization</h3>
+
+                <p>
+                    Smart AI-powered categorization of your expenses
+                    based on merchant names and patterns.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2); color: #e65100;">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <h3>Insightful Dashboard</h3>
+
+                <p>
+                    Visualize your spending habits with beautiful
+                    charts and detailed analytics.
+                </p>
+
+            </div>
+
+            <div class="feature-card">
+
+                <div class="feature-icon" style="background: linear-gradient(135deg, #fce4ec, #f8bbd0); color: #c62828;">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+
+                <h3>Mock UPI Payment</h3>
+
+                <p>
+                    Simulate real UPI transactions and watch them
+                    automatically appear in your expense tracker.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+
+        <div class="stats-grid">
+
+            <div class="stat-item">
+
+                <span class="stat-number">50K+</span>
+
+                <span class="stat-label">Transactions Tracked</span>
+
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+
+                <span class="stat-number">99%</span>
+
+                <span class="stat-label">Categorization Accuracy</span>
+
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+
+                <span class="stat-number">5K+</span>
+
+                <span class="stat-label">Happy Users</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+
+        <h2>Ready to take control of your finances?</h2>
+
+        <p>
+            Join thousands of users who are already tracking their
+            expenses smarter and faster.
+        </p>
+
+        <a href="{{ url_for('register_page') }}" class="btn-cta">
+
+            <i class="bi bi-arrow-right-circle"></i>
+
+            Get Started Free
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===== SLIM FULL WIDTH FOOTER ===== -->
+<footer class="front-footer">
+    <div class="footer-inner">
+        <span class="footer-brand">Advanced Expense Tracker</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Manage your income, expenses and savings with ease.</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Developed with ❤️ by <strong>Donbok Syiemlieh</strong></span>
+        <span class="footer-divider">|</span>
+        <span class="footer-copy">© 2026</span>
+    </div>
+</footer>
+
+{% endblock %}

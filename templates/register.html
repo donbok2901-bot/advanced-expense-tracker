@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <div class="register-header">
+
+            <div class="register-icon">
+                <i class="bi bi-person-plus"></i>
+            </div>
+
+            <h2>Create an Account</h2>
+
+            <p class="register-subtitle">
+                Join thousands of users tracking their expenses smarter.
+            </p>
+
+        </div>
+
+        <form method="POST" class="register-form">
+
+            <div class="form-group">
+
+                <label for="name">
+
+                    <i class="bi bi-person"></i>
+
+                    Full Name
+
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Enter your full name"
+                    required
+                    class="form-input">
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    <i class="bi bi-envelope"></i>
+
+                    Email Address
+
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Enter your email address"
+                    required
+                    class="form-input">
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    <i class="bi bi-lock"></i>
+
+                    Password
+
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Create a password"
+                        required
+                        class="form-input password-input">
+
+                    <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+
+                        <i class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
+                <div class="password-hint">
+                    <i class="bi bi-info-circle"></i>
+                    Must be at least 6 characters long
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="confirm_password">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Confirm Password
+
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        id="confirm_password"
+                        placeholder="Confirm your password"
+                        required
+                        class="form-input password-input">
+
+                    <button type="button" class="toggle-password" id="toggleConfirmPassword" aria-label="Toggle password visibility">
+
+                        <i class="bi bi-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="form-group checkbox-group">
+
+                <label class="checkbox-label">
+
+                    <input type="checkbox" name="terms" id="terms" required>
+
+                    <span>
+                        I agree to the <a href="#" class="terms-link">Terms of Service</a>
+                        and <a href="#" class="terms-link">Privacy Policy</a>
+                    </span>
+
+                </label>
+
+            </div>
+
+            <button type="submit" class="btn-register">
+
+                <i class="bi bi-person-plus"></i>
+
+                Create Account
+
+            </button>
+
+        </form>
+
+        <div class="register-footer">
+
+            <p>
+                Already have an account?
+
+                <a href="{{ url_for('login_page') }}" class="login-link">
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Login here
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===== SLIM FULL WIDTH FOOTER ===== -->
+<footer class="register-footer-bottom">
+    <div class="footer-inner">
+        <span class="footer-brand">Advanced Expense Tracker</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Manage your income, expenses and savings with ease.</span>
+        <span class="footer-divider">|</span>
+        <span class="footer-text">Developed with ❤️ by <strong>Donbok Syiemlieh</strong></span>
+        <span class="footer-divider">|</span>
+        <span class="footer-copy">© 2026</span>
+    </div>
+</footer>
+
+<script>
+    // Toggle password visibility
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle for password field
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+
+        if (togglePassword && password) {
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.className = type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+                }
+            });
+        }
+
+        // Toggle for confirm password field
+        const toggleConfirm = document.getElementById('toggleConfirmPassword');
+        const confirmPassword = document.getElementById('confirm_password');
+
+        if (toggleConfirm && confirmPassword) {
+            toggleConfirm.addEventListener('click', function() {
+                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPassword.setAttribute('type', type);
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.className = type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}

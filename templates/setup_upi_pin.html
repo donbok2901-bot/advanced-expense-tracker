@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Set Up UPI PIN{% endblock %}
+{% block content %}
+
+<div class="upi-setup-container">
+
+    <div class="upi-setup-card">
+
+        <div class="upi-setup-icon">
+            <i class="bi bi-shield-lock-fill"></i>
+        </div>
+
+        <h2>Set Up Your UPI PIN</h2>
+        <p class="upi-setup-sub">
+            You'll use this PIN to authorize payments and check your balance.
+            This is a one-time setup.
+        </p>
+
+        <form method="POST" class="upi-setup-form">
+
+            <label for="pin">Create PIN (4-6 digits)</label>
+            <input type="password" name="pin" id="pin" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="6" required autocomplete="off">
+
+            <label for="confirm_pin">Confirm PIN</label>
+            <input type="password" name="confirm_pin" id="confirm_pin" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="6" required autocomplete="off">
+
+            <button type="submit" class="btn btn-primary" style="width:100%;">
+                <i class="bi bi-shield-check"></i> Set PIN
+            </button>
+
+        </form>
+
+        <p class="upi-setup-note">
+            <i class="bi bi-info-circle"></i>
+            This PIN is stored securely (hashed, never in plain text) and is
+            only used within this demo app.
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
