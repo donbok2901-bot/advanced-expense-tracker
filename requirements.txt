@@ -4,3 +4,4 @@ flask-mail
 itsdangerous
 python-dotenv
 pandas
+gunicorn
