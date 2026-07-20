@@ -104,13 +104,38 @@
 
         <div class="payment-body">
 
+            <!-- Pay-to Mode Toggle -->
+            <div class="pay-mode-toggle">
+                <button type="button" class="pay-mode-btn active" data-mode="merchant">
+                    <i class="bi bi-shop"></i> Merchant
+                </button>
+                <button type="button" class="pay-mode-btn" data-mode="upi">
+                    <i class="bi bi-at"></i> UPI ID
+                </button>
+                <button type="button" class="pay-mode-btn" data-mode="contact">
+                    <i class="bi bi-person"></i> Contact
+                </button>
+            </div>
+
+            <!-- UPI ID / Contact Resolver (hidden in Merchant mode) -->
+            <div class="resolver-section hidden" id="resolver-section">
+                <div class="resolver-input-row">
+                    <input type="text" id="payee-id-input" class="payee-id-input"
+                           placeholder="example@okhdfcbank">
+                    <button type="button" id="resolve-btn" class="resolve-btn">
+                        <i class="bi bi-search"></i> Verify
+                    </button>
+                </div>
+                <p id="resolve-error" class="pin-error hidden"></p>
+            </div>
+
             <!-- Merchant / Payee Section -->
             <div class="payee-section">
-                <div class="payee-avatar">
+                <div class="payee-avatar" id="payee-avatar-icon">
                     <i class="bi bi-shop"></i>
                 </div>
                 <div class="payee-info">
-                    <span class="payee-label">Pay to</span>
+                    <span class="payee-label" id="payee-label">Pay to</span>
                     <input type="text" id="merchant" class="payee-input" placeholder="Enter merchant name" required>
                 </div>
             </div>
@@ -300,6 +325,99 @@
     let selectedApp = "";
     let pendingMerchant = "";
     let pendingAmount = "";
+    let payMode = "merchant"; // 'merchant', 'upi', or 'contact'
+    let resolvedPayeeId = "";
+
+    // Sample "known" merchants/contacts so the demo resolves realistically.
+    // Anything else still works -- it generates a reasonable name instead.
+    const KNOWN_UPI_IDS = {
+        "zomato@paytm": "Zomato",
+        "swiggy@okicici": "Swiggy",
+        "uber@okhdfcbank": "Uber India",
+        "amazon@apl": "Amazon Pay",
+        "flipkart@ybl": "Flipkart",
+        "meesho@okicici": "Meesho",
+        "bigbasket@ybl": "BigBasket",
+        "netflix@okaxis": "Netflix"
+    };
+
+    const KNOWN_CONTACTS = {
+        "9876543210": "Rahul's Kirana Store",
+        "9123456780": "Sharma Medical Store",
+        "9988776655": "City Electronics"
+    };
+
+    // Pay-mode toggle (Merchant / UPI ID / Contact)
+    document.querySelectorAll('.pay-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.pay-mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            payMode = btn.dataset.mode;
+
+            const resolverSection = document.getElementById('resolver-section');
+            const merchantInput = document.getElementById('merchant');
+            const payeeIdInput = document.getElementById('payee-id-input');
+            const payeeLabel = document.getElementById('payee-label');
+            const payeeIcon = document.getElementById('payee-avatar-icon');
+
+            resolvedPayeeId = "";
+            payeeIdInput.value = "";
+            document.getElementById('resolve-error').classList.add('hidden');
+
+            if (payMode === 'merchant') {
+                resolverSection.classList.add('hidden');
+                merchantInput.value = "";
+                merchantInput.placeholder = "Enter merchant name";
+                payeeLabel.textContent = "Pay to";
+                payeeIcon.innerHTML = '<i class="bi bi-shop"></i>';
+            } else if (payMode === 'upi') {
+                resolverSection.classList.remove('hidden');
+                payeeIdInput.placeholder = "example@okhdfcbank";
+                merchantInput.value = "";
+                merchantInput.placeholder = "Verify UPI ID above first";
+                payeeLabel.textContent = "Paying";
+                payeeIcon.innerHTML = '<i class="bi bi-at"></i>';
+            } else {
+                resolverSection.classList.remove('hidden');
+                payeeIdInput.placeholder = "10-digit mobile number";
+                merchantInput.value = "";
+                merchantInput.placeholder = "Verify contact above first";
+                payeeLabel.textContent = "Paying";
+                payeeIcon.innerHTML = '<i class="bi bi-person"></i>';
+            }
+        });
+    });
+
+    document.getElementById('resolve-btn').addEventListener('click', () => {
+        const value = document.getElementById('payee-id-input').value.trim();
+        const errorEl = document.getElementById('resolve-error');
+        let resolvedName = "";
+
+        if (payMode === 'upi') {
+            const upiPattern = /^[\w.\-]{2,}@[a-zA-Z]{2,}$/;
+            if (!upiPattern.test(value)) {
+                errorEl.textContent = "Enter a valid UPI ID (e.g. name@bank)";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            resolvedPayeeId = value;
+            resolvedName = KNOWN_UPI_IDS[value.toLowerCase()] ||
+                (value.split('@')[0].charAt(0).toUpperCase() + value.split('@')[0].slice(1));
+        } else {
+            const phonePattern = /^[6-9]\d{9}$/;
+            if (!phonePattern.test(value)) {
+                errorEl.textContent = "Enter a valid 10-digit mobile number";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            resolvedPayeeId = value;
+            resolvedName = KNOWN_CONTACTS[value] || ("Contact ending " + value.slice(-4));
+        }
+
+        errorEl.classList.add('hidden');
+        document.getElementById('merchant').value = resolvedName;
+        document.getElementById('merchant').placeholder = "";
+    });
 
     document.querySelectorAll('.app-choice').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -411,7 +529,8 @@
                     merchant: pendingMerchant,
                     amount: pendingAmount,
                     app_name: selectedApp,
-                    pin: pin
+                    pin: pin,
+                    payee_id: resolvedPayeeId
                 })
             });
             const data = await res.json();
@@ -469,6 +588,9 @@
     document.getElementById('pay-again-btn').addEventListener('click', () => {
         document.getElementById('merchant').value = "";
         document.getElementById('amount').value = "";
+        document.getElementById('payee-id-input').value = "";
+        document.getElementById('resolve-error').classList.add('hidden');
+        resolvedPayeeId = "";
         successScreen.classList.remove('active');
         successScreen.classList.add('hidden');
         appSelectScreen.classList.remove('hidden');
