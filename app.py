@@ -1036,6 +1036,14 @@ def transaction_detail(id):
     return render_template("transaction_detail.html", txn=txn)
 
 
+# Run once when this module is imported -- whether that's via
+# `python app.py` locally, or via gunicorn ("gunicorn app:app") in
+# production. If this were only inside the __main__ block below, gunicorn
+# would never call it, since gunicorn imports the app rather than running
+# it as a script -- which is exactly what caused the "relation users
+# does not exist" error on Render.
+create_table()
+
+
 if __name__ == "__main__":
-    create_table()
     app.run(debug=True)
