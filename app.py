@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, redirect, flash, session, jsonify, Response
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_mail import Mail, Message
+import requests
 from itsdangerous import URLSafeTimedSerializer
 from dotenv import load_dotenv
 import pandas as pd
@@ -16,14 +16,34 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key-change-me")
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")  # must match your verified SendGrid sender
 
-mail = Mail(app)
+
+def send_email(to_email, subject, body_text):
+    """Sends an email via the SendGrid API (over HTTPS) instead of raw
+    SMTP. Render's free tier blocks outbound SMTP ports (587/465), which
+    caused password reset emails to hang and time out. HTTPS traffic
+    isn't blocked, so this works both locally and in production."""
+    api_key = os.getenv("SENDGRID_API_KEY")
+    from_email = app.config["MAIL_USERNAME"]
+
+    payload = {
+        "personalizations": [{"to": [{"email": to_email}]}],
+        "from": {"email": from_email},
+        "subject": subject,
+        "content": [{"type": "text/plain", "value": body_text}],
+    }
+
+    response = requests.post(
+        "https://api.sendgrid.com/v3/mail/send",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        json=payload,
+        timeout=10,
+    )
+    return response
 serializer = URLSafeTimedSerializer(app.secret_key)
 
 DEFAULT_CATEGORIES = [
@@ -40,7 +60,7 @@ CATEGORY_KEYWORDS = {
              "behrouz", "box8", "freshmenu"],
     "Travel": ["uber", "ola", "irctc", "redbus", "flight", "airlines",
                "indigo", "train", "metro", "cab", "rapido", "makemytrip",
-               "goibibo", "yatra", "cleartrip"],
+               "goibibo", "yatra", "cleartrip", "air india"],
     "Shopping": ["amazon", "flipkart", "myntra", "ajio", "mall", "shopping",
                  "meesho", "snapdeal", "nykaa", "tatacliq", "croma",
                  "reliance digital", "shopclues", "limeroad", "lenskart",
@@ -358,10 +378,11 @@ def forget_password():
 
         if user:
             token = serializer.dumps(email, salt="password-reset")
-            reset_link = f"http://localhost:5000/reset-password/{token}"
+            # request.host_url gives the correct base URL whether running
+            # locally (http://127.0.0.1:5000/) or on Render (https://your-app.onrender.com/)
+            reset_link = f"{request.host_url}reset-password/{token}"
 
-            msg = Message(subject="Expense Tracker - Password Reset", recipients=[email])
-            msg.body = f"""Hello,
+            body_text = f"""Hello,
 
 You requested to reset your password.
 
@@ -373,8 +394,13 @@ If you did not request this, please ignore this email.
 
 Expense Tracker Team
 """
-            mail.send(msg)
-            flash("A password reset link has been sent to your email.", "success")
+            response = send_email(email, "Expense Tracker - Password Reset", body_text)
+
+            if response.status_code in (200, 201, 202):
+                flash("A password reset link has been sent to your email.", "success")
+            else:
+                flash("Could not send reset email right now. Please try again later.", "danger")
+
             return redirect("/login")
         else:
             flash("No account found with that email.", "danger")
